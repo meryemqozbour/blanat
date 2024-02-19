@@ -1,0 +1,27 @@
+import heapq
+from collections import defaultdict
+
+def find_cheapest_city(filename):
+    city_prices = defaultdict(list)
+
+    with open(filename, 'r') as file:
+        for line in file:
+            city, vegetable, price = line.strip().split(',')
+            city_prices[city].append((int(price), vegetable))
+
+    cheapest_cities = []
+
+    for city, prices in city_prices.items():
+        total_price = sum(price for price, _ in prices)
+        heapq.heappush(cheapest_cities, (total_price, city))
+
+    cheapest_cities.sort()
+
+    for total_price, city in cheapest_cities[:5]:
+        print(f"City: {city}, Total Price: {total_price}")
+        top_vegetables = sorted(city_prices[city])[:5]
+        for price, vegetable in top_vegetables:
+            print(f"  {vegetable}: ${price}")
+
+# Usage
+find_cheapest_city("vegetable_prices.txt")
